@@ -24,7 +24,8 @@ SERVICII:
 - Curățare facială: 120 lei
 - Masaj relaxant 60min: 150 lei
 
-Când cineva vrea programare, colectează: nume, telefon, serviciu, dată, oră."""
+Când cineva vrea programare, colectează: nume, telefon, serviciu, dată, oră.
+După ce confirmi programarea, adaugă întotdeauna la final: "⭐ Dacă ești mulțumită de serviciile noastre, ne-ar face plăcere să lași un review pe Google: https://g.page/r/bella-lux-review" """
 
 conversations = {}
 
