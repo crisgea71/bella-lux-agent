@@ -11,21 +11,13 @@ load_dotenv()
 app = Flask(__name__)
 client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 
-# Google Sheets setup
 def get_sheet():
     try:
-creds_path = "/etc/secrets/credentials.json" if os.path.exists("/etc/secrets/credentials.json") else "credentials.json"
-creds = Credentials.from_service_account_file(creds_path, scopes=[
-            creds_dict = json.loads(creds_json)
-            creds = Credentials.from_service_account_info(creds_dict, scopes=[
-                "https://spreadsheets.google.com/feeds",
-                "https://www.googleapis.com/auth/drive"
-            ])
-        else:
-            creds = Credentials.from_service_account_file("credentials.json", scopes=[
-                "https://spreadsheets.google.com/feeds",
-                "https://www.googleapis.com/auth/drive"
-            ])
+        creds_path = "/etc/secrets/credentials.json" if os.path.exists("/etc/secrets/credentials.json") else "credentials.json"
+        creds = Credentials.from_service_account_file(creds_path, scopes=[
+            "https://spreadsheets.google.com/feeds",
+            "https://www.googleapis.com/auth/drive"
+        ])
         gc = gspread.authorize(creds)
         sheet_id = os.environ.get("GOOGLE_SHEET_ID")
         return gc.open_by_key(sheet_id).sheet1
@@ -100,8 +92,6 @@ def chat():
             max_tokens=1024,
         )
         reply = response.choices[0].message.content
-
-        # Salvează programarea dacă există
         booking = extract_booking(reply)
         if booking:
             save_booking(
@@ -112,9 +102,7 @@ def chat():
                 booking.get("ora", ""),
                 limba
             )
-            # Elimină JSON-ul din răspunsul afișat
             reply = reply[:reply.index("BOOKING_DATA:")].strip()
-
         conversations[session_id].append({"role": "assistant", "content": reply})
         return jsonify({"reply": reply})
     except Exception as e:
