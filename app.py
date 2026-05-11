@@ -14,8 +14,8 @@ client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 # Google Sheets setup
 def get_sheet():
     try:
-        creds_json = os.environ.get("GOOGLE_CREDENTIALS")
-        if creds_json:
+creds_path = "/etc/secrets/credentials.json" if os.path.exists("/etc/secrets/credentials.json") else "credentials.json"
+creds = Credentials.from_service_account_file(creds_path, scopes=[
             creds_dict = json.loads(creds_json)
             creds = Credentials.from_service_account_info(creds_dict, scopes=[
                 "https://spreadsheets.google.com/feeds",
