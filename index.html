@@ -28,6 +28,8 @@
     @keyframes pulse { 0%,100%{box-shadow:0 0 0 2px rgba(126,201,138,0.3)}50%{box-shadow:0 0 0 5px rgba(126,201,138,0.1)} }
     .btn-reset { background: none; border: 1px solid var(--border); border-radius: 8px; width: 36px; height: 36px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 15px; transition: all 0.2s; }
     .btn-reset:hover { background: var(--rose-light); color: var(--rose-deep); }
+    .btn-lang { background: none; border: 1px solid var(--border); border-radius: 8px; width: 36px; height: 36px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: all 0.2s; }
+.btn-lang:hover { background: var(--rose-light); }
     .chips-wrap { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; flex-shrink: 0; }
     .chip { padding: 6px 14px; background: rgba(255,255,255,0.75); border: 1px solid var(--border); border-radius: 20px; font-size: 0.76rem; cursor: pointer; transition: all 0.18s; backdrop-filter: blur(8px); }
     .chip:hover { background: var(--rose-light); border-color: var(--rose-deep); color: #b05a5a; transform: translateY(-1px); }
@@ -106,7 +108,8 @@
       <div class="header-sub">Asistentă Cosmetică AI</div>
     </div>
     <div class="header-status"><div class="status-dot"></div>Online</div>
-    <button class="btn-reset" id="resetBtn" title="Conversație nouă">↺</button>
+    <button class="btn-lang" id="langBtn" onclick="toggleLang()" title="Switch language">🇷🇴</button>
+<button class="btn-reset" id="resetBtn" title="Conversație nouă">↺</button>
   </header>
   <div class="chips-wrap" id="chipsWrap">
   <button class="chip" onclick="sendChip('Ce servicii oferiți?')">💅 Servicii</button>
@@ -309,7 +312,17 @@
     currentDate.setMonth(currentDate.getMonth()+1); renderCalendar();
   });
 
-  window.addEventListener('load',()=>inputEl.focus());
+ let currentLang = 'ro';
+
+function toggleLang(){
+  currentLang = currentLang === 'ro' ? 'en' : 'ro';
+  document.getElementById('langBtn').textContent = currentLang === 'ro' ? '🇷🇴' : '🇬🇧';
+  const msg = currentLang === 'en' ? 'Please speak to me in English from now on.' : 'Te rog să îmi vorbești în română de acum.';
+  inputEl.value = msg;
+  sendMessage();
+}
+
+window.addEventListener('load',()=>inputEl.focus());
 </script>
 </body>
 </html>
