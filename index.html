@@ -13,11 +13,7 @@
       --muted: #8a7f8d; --border: #eedede;
     }
     html, body { height: 100%; background: var(--cream); font-family: 'DM Sans', sans-serif; color: var(--charcoal); overflow: hidden; }
-    body::before {
-      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
-      background: radial-gradient(ellipse 60% 40% at 0% 0%, rgba(244,198,198,0.35) 0%, transparent 60%),
-                  radial-gradient(ellipse 50% 50% at 100% 100%, rgba(201,169,110,0.18) 0%, transparent 55%);
-    }
+    body::before { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0; background: radial-gradient(ellipse 60% 40% at 0% 0%, rgba(244,198,198,0.35) 0%, transparent 60%), radial-gradient(ellipse 50% 50% at 100% 100%, rgba(201,169,110,0.18) 0%, transparent 55%); }
     .app { position: relative; z-index: 1; height: 100vh; display: flex; flex-direction: column; max-width: 780px; margin: 0 auto; padding: 20px 16px 0; }
     .header { display: flex; align-items: center; gap: 14px; padding: 18px 24px; background: rgba(255,255,255,0.82); backdrop-filter: blur(16px); border: 1px solid var(--border); border-radius: 18px; box-shadow: 0 4px 30px rgba(196,140,140,0.12); margin-bottom: 14px; flex-shrink: 0; }
     .header-avatar { width: 48px; height: 48px; background: linear-gradient(135deg, var(--rose-deep), var(--gold)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
@@ -29,7 +25,7 @@
     .btn-reset { background: none; border: 1px solid var(--border); border-radius: 8px; width: 36px; height: 36px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 15px; transition: all 0.2s; }
     .btn-reset:hover { background: var(--rose-light); color: var(--rose-deep); }
     .btn-lang { background: none; border: 1px solid var(--border); border-radius: 8px; width: 36px; height: 36px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: all 0.2s; }
-.btn-lang:hover { background: var(--rose-light); }
+    .btn-lang:hover { background: var(--rose-light); }
     .chips-wrap { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; flex-shrink: 0; }
     .chip { padding: 6px 14px; background: rgba(255,255,255,0.75); border: 1px solid var(--border); border-radius: 20px; font-size: 0.76rem; cursor: pointer; transition: all 0.18s; backdrop-filter: blur(8px); }
     .chip:hover { background: var(--rose-light); border-color: var(--rose-deep); color: #b05a5a; transform: translateY(-1px); }
@@ -64,15 +60,12 @@
     #sendBtn:hover { transform: scale(1.07); }
     #sendBtn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
     .footer-note { text-align: center; font-size: 0.68rem; color: var(--muted); padding-bottom: 6px; opacity: 0.7; }
-
-    /* BOOKING PANEL */
     .booking-panel { display: none; position: fixed; inset: 0; background: rgba(44,40,48,0.45); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; }
     .booking-panel.visible { display: flex; }
     .booking-card { background: var(--cream); border: 1px solid var(--border); border-radius: 24px; padding: 28px; width: 90%; max-width: 420px; box-shadow: 0 8px 40px rgba(196,140,140,0.25); animation: fadeUp 0.3s ease both; }
     .booking-title { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 600; margin-bottom: 20px; text-align: center; }
     .booking-section { margin-bottom: 20px; }
     .booking-label { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
-    /* Calendar */
     .cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
     .cal-month { font-weight: 500; font-size: 0.95rem; }
     .cal-nav { background: none; border: 1px solid var(--border); border-radius: 8px; width: 30px; height: 30px; cursor: pointer; font-size: 14px; color: var(--muted); transition: all 0.2s; }
@@ -85,12 +78,10 @@
     .cal-day.disabled { color: #d0c8cc; cursor: not-allowed; }
     .cal-day.empty { cursor: default; }
     .cal-day.today { font-weight: 600; color: var(--gold); }
-    /* Time slots */
     .time-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
     .time-slot { text-align: center; padding: 8px 4px; border-radius: 10px; font-size: 0.82rem; cursor: pointer; border: 1px solid var(--border); background: white; transition: all 0.15s; }
     .time-slot:hover { background: var(--rose-light); border-color: var(--rose-deep); }
     .time-slot.selected { background: linear-gradient(135deg, var(--rose-deep), #c97070); color: white; border-color: transparent; }
-    /* Buttons */
     .booking-actions { display: flex; gap: 10px; margin-top: 4px; }
     .btn-confirm { flex: 1; padding: 12px; border-radius: 12px; border: none; background: linear-gradient(135deg, var(--rose-deep), #c97070); color: white; font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: all 0.2s; }
     .btn-confirm:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(200,112,112,0.4); }
@@ -104,28 +95,28 @@
   <header class="header">
     <div class="header-avatar">🌸</div>
     <div>
-      <div class="header-name">Sophia – Bella Lux</div>
-      <div class="header-sub">Asistentă Cosmetică AI</div>
+      <div class="header-name" id="headerName">Sophia – Bella Lux</div>
+      <div class="header-sub" id="headerSub">Asistentă Cosmetică AI</div>
     </div>
-    <div class="header-status"><div class="status-dot"></div>Online</div>
+    <div class="header-status"><div class="status-dot"></div><span id="statusText">Online</span></div>
     <button class="btn-lang" id="langBtn" onclick="toggleLang()" title="Switch language">🇷🇴</button>
-<button class="btn-reset" id="resetBtn" title="Conversație nouă">↺</button>
+    <button class="btn-reset" id="resetBtn" title="Conversație nouă">↺</button>
   </header>
   <div class="chips-wrap" id="chipsWrap">
-  <button class="chip" onclick="sendChip('Ce servicii oferiți?')">💅 Servicii</button>
-  <button class="chip" onclick="sendChip('Care sunt prețurile?')">💰 Prețuri</button>
-  <button class="chip" onclick="sendChip('Care este programul vostru?')">🕐 Program</button>
-  <button class="chip" onclick="openBooking()">📅 Programare</button>
-  <button class="chip" onclick="sendChip('Ce produse folosiți?')">🧴 Produse</button>
-  <button class="chip" onclick="sendChip('Aveți pachete promoționale?')">🎁 Promoții</button>
-  <button class="chip" onclick="sendChip('Cum ajung la voi?')">📍 Locație</button>
-  <button class="chip" onclick="sendChip('Cât durează o ședință de manichiură?')">⏱ Durată</button>
-</div>
+    <button class="chip" id="chip0" onclick="sendChip(T.services)">💅 <span id="c0">Servicii</span></button>
+    <button class="chip" id="chip1" onclick="sendChip(T.prices)">💰 <span id="c1">Prețuri</span></button>
+    <button class="chip" id="chip2" onclick="sendChip(T.schedule)">🕐 <span id="c2">Program</span></button>
+    <button class="chip" id="chip3" onclick="openBooking()">📅 <span id="c3">Programare</span></button>
+    <button class="chip" id="chip4" onclick="sendChip(T.products)">🧴 <span id="c4">Produse</span></button>
+    <button class="chip" id="chip5" onclick="sendChip(T.promos)">🎁 <span id="c5">Promoții</span></button>
+    <button class="chip" id="chip6" onclick="sendChip(T.location)">📍 <span id="c6">Locație</span></button>
+    <button class="chip" id="chip7" onclick="sendChip(T.duration)">⏱ <span id="c7">Durată</span></button>
+  </div>
   <div class="messages" id="messages">
     <div class="welcome" id="welcomeMsg">
       <div class="welcome-icon">💆‍♀️</div>
-      <div class="welcome-title">Bine ai venit!</div>
-      <div class="welcome-text">Sunt Sophia, asistenta ta de la <strong>Bella Lux Beauty Studio</strong>. Te pot ajuta cu informații sau poți face o programare direct aici. ✨</div>
+      <div class="welcome-title" id="welcomeTitle">Bine ai venit!</div>
+      <div class="welcome-text" id="welcomeText">Sunt Sophia, asistenta ta de la <strong>Bella Lux Beauty Studio</strong>. Te pot ajuta cu informații sau poți face o programare direct aici. ✨</div>
     </div>
     <div class="msg-row bot typing-row" id="typingIndicator">
       <div class="msg-avatar">🌸</div>
@@ -137,17 +128,15 @@
       <textarea id="userInput" placeholder="Scrie un mesaj..." rows="1"></textarea>
       <button id="sendBtn">➤</button>
     </div>
-    <div class="footer-note">Bella Lux Beauty Studio · 0740 123 456</div>
+    <div class="footer-note" id="footerNote">Bella Lux Beauty Studio · 0740 123 456</div>
   </div>
 </div>
 
-<!-- BOOKING PANEL -->
 <div class="booking-panel" id="bookingPanel">
   <div class="booking-card">
-    <div class="booking-title">📅 Alege data și ora</div>
-
+    <div class="booking-title" id="bookingTitle">📅 Alege data și ora</div>
     <div class="booking-section">
-      <div class="booking-label">Data</div>
+      <div class="booking-label" id="bookingDateLabel">Data</div>
       <div class="cal-header">
         <button class="cal-nav" id="prevMonth">‹</button>
         <div class="cal-month" id="calMonth"></div>
@@ -155,15 +144,13 @@
       </div>
       <div class="cal-grid" id="calGrid"></div>
     </div>
-
     <div class="booking-section">
-      <div class="booking-label">Ora</div>
+      <div class="booking-label" id="bookingTimeLabel">Ora</div>
       <div class="time-grid" id="timeGrid"></div>
     </div>
-
     <div class="booking-actions">
-      <button class="btn-cancel" onclick="closeBooking()">Anul</button>
-      <button class="btn-confirm" id="confirmBtn" onclick="confirmBooking()" disabled>Confirmă programarea</button>
+      <button class="btn-cancel" onclick="closeBooking()" id="btnCancel">Anul</button>
+      <button class="btn-confirm" id="confirmBtn" onclick="confirmBooking()" disabled>Confirmă</button>
     </div>
   </div>
 </div>
@@ -171,11 +158,89 @@
 <script>
   const SESSION_ID = 'sess_' + Math.random().toString(36).slice(2,10);
   let isSending = false;
+  let currentLang = 'ro';
+
   const messagesEl = document.getElementById('messages');
   const inputEl = document.getElementById('userInput');
   const sendBtn = document.getElementById('sendBtn');
   const typingRow = document.getElementById('typingIndicator');
   const welcomeMsg = document.getElementById('welcomeMsg');
+
+  // Translations
+  const TRANSLATIONS = {
+    ro: {
+      headerSub: 'Asistentă Cosmetică AI',
+      status: 'Online',
+      services: 'Ce servicii oferiți?',
+      prices: 'Care sunt prețurile?',
+      schedule: 'Care este programul vostru?',
+      booking: 'Programare',
+      products: 'Ce produse folosiți?',
+      promos: 'Aveți pachete promoționale?',
+      location: 'Cum ajung la voi?',
+      duration: 'Cât durează o ședință de manichiură?',
+      c0:'Servicii', c1:'Prețuri', c2:'Program', c3:'Programare',
+      c4:'Produse', c5:'Promoții', c6:'Locație', c7:'Durată',
+      placeholder: 'Scrie un mesaj...',
+      welcomeTitle: 'Bine ai venit!',
+      welcomeText: 'Sunt Sophia, asistenta ta de la <strong>Bella Lux Beauty Studio</strong>. Te pot ajuta cu informații sau poți face o programare direct aici. ✨',
+      bookingTitle: '📅 Alege data și ora',
+      dateLabel: 'Data', timeLabel: 'Ora',
+      cancel: 'Anulează', confirm: 'Confirmă',
+      switchMsg: 'Te rog să îmi vorbești în română de acum.',
+      months: ['Ianuarie','Februarie','Martie','Aprilie','Mai','Iunie','Iulie','August','Septembrie','Octombrie','Noiembrie','Decembrie'],
+      days: ['Lu','Ma','Mi','Jo','Vi','Sâ','Du'],
+      dateFormat: (d) => d.toLocaleDateString('ro-RO', {weekday:'long', day:'numeric', month:'long', year:'numeric'}),
+      dateMsg: (d, t) => `Am ales data: ${d}, ora: ${t}`
+    },
+    en: {
+      headerSub: 'AI Beauty Assistant',
+      status: 'Online',
+      services: 'What services do you offer?',
+      prices: 'What are your prices?',
+      schedule: 'What are your opening hours?',
+      booking: 'Booking',
+      products: 'What products do you use?',
+      promos: 'Do you have any promotions?',
+      location: 'How do I get to you?',
+      duration: 'How long does a manicure take?',
+      c0:'Services', c1:'Prices', c2:'Schedule', c3:'Booking',
+      c4:'Products', c5:'Promotions', c6:'Location', c7:'Duration',
+      placeholder: 'Type a message...',
+      welcomeTitle: 'Welcome!',
+      welcomeText: 'I\'m Sophia, your assistant at <strong>Bella Lux Beauty Studio</strong>. I can help with info or book an appointment. ✨',
+      bookingTitle: '📅 Choose date & time',
+      dateLabel: 'Date', timeLabel: 'Time',
+      cancel: 'Cancel', confirm: 'Confirm',
+      switchMsg: 'Please speak to me in English from now on.',
+      months: ['January','February','March','April','May','June','July','August','September','October','November','December'],
+      days: ['Mo','Tu','We','Th','Fr','Sa','Su'],
+      dateFormat: (d) => d.toLocaleDateString('en-GB', {weekday:'long', day:'numeric', month:'long', year:'numeric'}),
+      dateMsg: (d, t) => `I chose the date: ${d}, time: ${t}`
+    }
+  };
+
+  let T = TRANSLATIONS.ro;
+
+  function toggleLang(){
+    currentLang = currentLang === 'ro' ? 'en' : 'ro';
+    T = TRANSLATIONS[currentLang];
+    document.getElementById('langBtn').textContent = currentLang === 'ro' ? '🇷🇴' : '🇬🇧';
+    document.getElementById('headerSub').textContent = T.headerSub;
+    document.getElementById('statusText').textContent = T.status;
+    for(let i=0; i<8; i++) document.getElementById('c'+i).textContent = T['c'+i];
+    inputEl.placeholder = T.placeholder;
+    document.getElementById('welcomeTitle').textContent = T.welcomeTitle;
+    document.getElementById('welcomeText').innerHTML = T.welcomeText;
+    document.getElementById('bookingTitle').textContent = T.bookingTitle;
+    document.getElementById('bookingDateLabel').textContent = T.dateLabel;
+    document.getElementById('bookingTimeLabel').textContent = T.timeLabel;
+    document.getElementById('btnCancel').textContent = T.cancel;
+    document.getElementById('confirmBtn').textContent = T.confirm;
+    renderCalendar();
+    inputEl.value = T.switchMsg;
+    sendMessage();
+  }
 
   inputEl.addEventListener('input', () => { inputEl.style.height='auto'; inputEl.style.height=Math.min(inputEl.scrollHeight,120)+'px'; });
   inputEl.addEventListener('keydown', e => { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();} });
@@ -215,10 +280,10 @@
       const res = await fetch('/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id:SESSION_ID,message:text})});
       const data = await res.json();
       typingRow.classList.remove('visible');
-      appendMessage('bot', data.reply||data.error||'Eroare neașteptată.');
+      appendMessage('bot', data.reply||data.error||'Unexpected error.');
     } catch(err){
       typingRow.classList.remove('visible');
-      appendMessage('bot','😔 Nu pot comunica cu serverul. Încearcă din nou.');
+      appendMessage('bot','😔 Cannot connect to server. Please try again.');
     }
     isSending=false; sendBtn.disabled=false; inputEl.focus();
   }
@@ -229,100 +294,74 @@
     if(welcomeMsg) welcomeMsg.style.display='block';
   }
 
-  // ============ CALENDAR ============
+  // CALENDAR
   let currentDate = new Date();
   let selectedDate = null;
   let selectedTime = null;
-  const MONTHS = ['Ianuarie','Februarie','Martie','Aprilie','Mai','Iunie','Iulie','August','Septembrie','Octombrie','Noiembrie','Decembrie'];
-  const DAYS = ['Lu','Ma','Mi','Jo','Vi','Sâ','Du'];
   const TIMES = ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00'];
 
   function openBooking(){
-    selectedDate = null; selectedTime = null;
-    document.getElementById('confirmBtn').disabled = true;
-    renderCalendar();
-    renderTimes();
+    selectedDate=null; selectedTime=null;
+    document.getElementById('confirmBtn').disabled=true;
+    renderCalendar(); renderTimes();
     document.getElementById('bookingPanel').classList.add('visible');
   }
 
-  function closeBooking(){
-    document.getElementById('bookingPanel').classList.remove('visible');
-  }
+  function closeBooking(){ document.getElementById('bookingPanel').classList.remove('visible'); }
 
   function renderCalendar(){
-    const y = currentDate.getFullYear();
-    const m = currentDate.getMonth();
-    document.getElementById('calMonth').textContent = MONTHS[m] + ' ' + y;
-    const grid = document.getElementById('calGrid');
-    grid.innerHTML = '';
-    DAYS.forEach(d => { const el = document.createElement('div'); el.className='cal-day-name'; el.textContent=d; grid.appendChild(el); });
-    const firstDay = new Date(y, m, 1).getDay();
-    const offset = firstDay === 0 ? 6 : firstDay - 1;
-    const daysInMonth = new Date(y, m+1, 0).getDate();
-    const today = new Date(); today.setHours(0,0,0,0);
-    for(let i=0; i<offset; i++){ const el=document.createElement('div'); el.className='cal-day empty'; grid.appendChild(el); }
-    for(let d=1; d<=daysInMonth; d++){
-      const el = document.createElement('div');
-      el.className = 'cal-day';
-      el.textContent = d;
-      const date = new Date(y, m, d);
-      const dayOfWeek = date.getDay();
-      if(date < today || dayOfWeek === 0) { el.classList.add('disabled'); }
+    const y=currentDate.getFullYear(), m=currentDate.getMonth();
+    document.getElementById('calMonth').textContent = T.months[m]+' '+y;
+    const grid=document.getElementById('calGrid');
+    grid.innerHTML='';
+    T.days.forEach(d=>{ const el=document.createElement('div'); el.className='cal-day-name'; el.textContent=d; grid.appendChild(el); });
+    const firstDay=new Date(y,m,1).getDay();
+    const offset=firstDay===0?6:firstDay-1;
+    const daysInMonth=new Date(y,m+1,0).getDate();
+    const today=new Date(); today.setHours(0,0,0,0);
+    for(let i=0;i<offset;i++){ const el=document.createElement('div'); el.className='cal-day empty'; grid.appendChild(el); }
+    for(let d=1;d<=daysInMonth;d++){
+      const el=document.createElement('div'); el.className='cal-day'; el.textContent=d;
+      const date=new Date(y,m,d); const dow=date.getDay();
+      if(date<today||dow===0){ el.classList.add('disabled'); }
       else {
-        if(date.toDateString() === today.toDateString()) el.classList.add('today');
-        if(selectedDate && date.toDateString() === selectedDate.toDateString()) el.classList.add('selected');
-        el.addEventListener('click', () => { selectedDate = date; renderCalendar(); checkConfirm(); });
+        if(date.toDateString()===today.toDateString()) el.classList.add('today');
+        if(selectedDate&&date.toDateString()===selectedDate.toDateString()) el.classList.add('selected');
+        el.addEventListener('click',()=>{ selectedDate=date; renderCalendar(); checkConfirm(); });
       }
       grid.appendChild(el);
     }
   }
 
   function renderTimes(){
-    const grid = document.getElementById('timeGrid');
-    grid.innerHTML = '';
-    TIMES.forEach(t => {
-      const el = document.createElement('div');
-      el.className = 'time-slot';
-      el.textContent = t;
-      if(selectedTime === t) el.classList.add('selected');
-      el.addEventListener('click', () => { selectedTime = t; renderTimes(); checkConfirm(); });
+    const grid=document.getElementById('timeGrid'); grid.innerHTML='';
+    TIMES.forEach(t=>{
+      const el=document.createElement('div'); el.className='time-slot'; el.textContent=t;
+      if(selectedTime===t) el.classList.add('selected');
+      el.addEventListener('click',()=>{ selectedTime=t; renderTimes(); checkConfirm(); });
       grid.appendChild(el);
     });
   }
 
-  function checkConfirm(){
-    document.getElementById('confirmBtn').disabled = !(selectedDate && selectedTime);
-  }
+  function checkConfirm(){ document.getElementById('confirmBtn').disabled=!(selectedDate&&selectedTime); }
 
   function confirmBooking(){
-    if(!selectedDate || !selectedTime) return;
-    const dateStr = selectedDate.toLocaleDateString('ro-RO', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
-    const msg = `Am ales data: ${dateStr}, ora: ${selectedTime}`;
+    if(!selectedDate||!selectedTime) return;
+    const dateStr = T.dateFormat(selectedDate);
+    const msg = T.dateMsg(dateStr, selectedTime);
     closeBooking();
-    inputEl.value = msg;
+    inputEl.value=msg;
     sendMessage();
   }
 
-  document.getElementById('prevMonth').addEventListener('click', () => {
-    const today = new Date();
-    if(currentDate.getFullYear() === today.getFullYear() && currentDate.getMonth() === today.getMonth()) return;
+  document.getElementById('prevMonth').addEventListener('click',()=>{
+    const today=new Date();
+    if(currentDate.getFullYear()===today.getFullYear()&&currentDate.getMonth()===today.getMonth()) return;
     currentDate.setMonth(currentDate.getMonth()-1); renderCalendar();
   });
-  document.getElementById('nextMonth').addEventListener('click', () => {
-    currentDate.setMonth(currentDate.getMonth()+1); renderCalendar();
-  });
+  document.getElementById('nextMonth').addEventListener('click',()=>{ currentDate.setMonth(currentDate.getMonth()+1); renderCalendar(); });
 
- let currentLang = 'ro';
-
-function toggleLang(){
-  currentLang = currentLang === 'ro' ? 'en' : 'ro';
-  document.getElementById('langBtn').textContent = currentLang === 'ro' ? '🇷🇴' : '🇬🇧';
-  const msg = currentLang === 'en' ? 'Please speak to me in English from now on.' : 'Te rog să îmi vorbești în română de acum.';
-  inputEl.value = msg;
-  sendMessage();
-}
-
-window.addEventListener('load',()=>inputEl.focus());
+  window.addEventListener('load',()=>inputEl.focus());
 </script>
 </body>
 </html>
