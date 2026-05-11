@@ -62,6 +62,39 @@
     #sendBtn:hover { transform: scale(1.07); }
     #sendBtn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
     .footer-note { text-align: center; font-size: 0.68rem; color: var(--muted); padding-bottom: 6px; opacity: 0.7; }
+
+    /* BOOKING PANEL */
+    .booking-panel { display: none; position: fixed; inset: 0; background: rgba(44,40,48,0.45); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; }
+    .booking-panel.visible { display: flex; }
+    .booking-card { background: var(--cream); border: 1px solid var(--border); border-radius: 24px; padding: 28px; width: 90%; max-width: 420px; box-shadow: 0 8px 40px rgba(196,140,140,0.25); animation: fadeUp 0.3s ease both; }
+    .booking-title { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 600; margin-bottom: 20px; text-align: center; }
+    .booking-section { margin-bottom: 20px; }
+    .booking-label { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
+    /* Calendar */
+    .cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .cal-month { font-weight: 500; font-size: 0.95rem; }
+    .cal-nav { background: none; border: 1px solid var(--border); border-radius: 8px; width: 30px; height: 30px; cursor: pointer; font-size: 14px; color: var(--muted); transition: all 0.2s; }
+    .cal-nav:hover { background: var(--rose-light); color: var(--rose-deep); }
+    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+    .cal-day-name { text-align: center; font-size: 0.68rem; color: var(--muted); padding: 4px 0; }
+    .cal-day { text-align: center; padding: 7px 4px; border-radius: 8px; font-size: 0.82rem; cursor: pointer; transition: all 0.15s; border: 1px solid transparent; }
+    .cal-day:hover:not(.disabled):not(.empty) { background: var(--rose-light); border-color: var(--rose); }
+    .cal-day.selected { background: linear-gradient(135deg, var(--rose-deep), #c97070); color: white; border-color: transparent; }
+    .cal-day.disabled { color: #d0c8cc; cursor: not-allowed; }
+    .cal-day.empty { cursor: default; }
+    .cal-day.today { font-weight: 600; color: var(--gold); }
+    /* Time slots */
+    .time-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .time-slot { text-align: center; padding: 8px 4px; border-radius: 10px; font-size: 0.82rem; cursor: pointer; border: 1px solid var(--border); background: white; transition: all 0.15s; }
+    .time-slot:hover { background: var(--rose-light); border-color: var(--rose-deep); }
+    .time-slot.selected { background: linear-gradient(135deg, var(--rose-deep), #c97070); color: white; border-color: transparent; }
+    /* Buttons */
+    .booking-actions { display: flex; gap: 10px; margin-top: 4px; }
+    .btn-confirm { flex: 1; padding: 12px; border-radius: 12px; border: none; background: linear-gradient(135deg, var(--rose-deep), #c97070); color: white; font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+    .btn-confirm:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(200,112,112,0.4); }
+    .btn-confirm:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .btn-cancel { padding: 12px 20px; border-radius: 12px; border: 1px solid var(--border); background: white; color: var(--muted); font-size: 0.9rem; cursor: pointer; transition: all 0.2s; }
+    .btn-cancel:hover { background: var(--rose-light); }
   </style>
 </head>
 <body>
@@ -75,12 +108,16 @@
     <div class="header-status"><div class="status-dot"></div>Online</div>
     <button class="btn-reset" id="resetBtn" title="Conversație nouă">↺</button>
   </header>
-  <div class="chips-wrap">
-    <button class="chip" onclick="sendChip('Ce servicii oferiți?')">💅 Servicii</button>
-    <button class="chip" onclick="sendChip('Care sunt prețurile?')">💰 Prețuri</button>
-    <button class="chip" onclick="sendChip('Care este programul vostru?')">🕐 Program</button>
-    <button class="chip" onclick="sendChip('Vreau să fac o programare')">📅 Programare</button>
-  </div>
+  <div class="chips-wrap" id="chipsWrap">
+  <button class="chip" onclick="sendChip('Ce servicii oferiți?')">💅 Servicii</button>
+  <button class="chip" onclick="sendChip('Care sunt prețurile?')">💰 Prețuri</button>
+  <button class="chip" onclick="sendChip('Care este programul vostru?')">🕐 Program</button>
+  <button class="chip" onclick="openBooking()">📅 Programare</button>
+  <button class="chip" onclick="sendChip('Ce produse folosiți?')">🧴 Produse</button>
+  <button class="chip" onclick="sendChip('Aveți pachete promoționale?')">🎁 Promoții</button>
+  <button class="chip" onclick="sendChip('Cum ajung la voi?')">📍 Locație</button>
+  <button class="chip" onclick="sendChip('Cât durează o ședință de manichiură?')">⏱ Durată</button>
+</div>
   <div class="messages" id="messages">
     <div class="welcome" id="welcomeMsg">
       <div class="welcome-icon">💆‍♀️</div>
@@ -100,6 +137,34 @@
     <div class="footer-note">Bella Lux Beauty Studio · 0740 123 456</div>
   </div>
 </div>
+
+<!-- BOOKING PANEL -->
+<div class="booking-panel" id="bookingPanel">
+  <div class="booking-card">
+    <div class="booking-title">📅 Alege data și ora</div>
+
+    <div class="booking-section">
+      <div class="booking-label">Data</div>
+      <div class="cal-header">
+        <button class="cal-nav" id="prevMonth">‹</button>
+        <div class="cal-month" id="calMonth"></div>
+        <button class="cal-nav" id="nextMonth">›</button>
+      </div>
+      <div class="cal-grid" id="calGrid"></div>
+    </div>
+
+    <div class="booking-section">
+      <div class="booking-label">Ora</div>
+      <div class="time-grid" id="timeGrid"></div>
+    </div>
+
+    <div class="booking-actions">
+      <button class="btn-cancel" onclick="closeBooking()">Anul</button>
+      <button class="btn-confirm" id="confirmBtn" onclick="confirmBooking()" disabled>Confirmă programarea</button>
+    </div>
+  </div>
+</div>
+
 <script>
   const SESSION_ID = 'sess_' + Math.random().toString(36).slice(2,10);
   let isSending = false;
@@ -160,6 +225,89 @@
     document.querySelectorAll('.msg-row:not(.typing-row)').forEach(b=>b.remove());
     if(welcomeMsg) welcomeMsg.style.display='block';
   }
+
+  // ============ CALENDAR ============
+  let currentDate = new Date();
+  let selectedDate = null;
+  let selectedTime = null;
+  const MONTHS = ['Ianuarie','Februarie','Martie','Aprilie','Mai','Iunie','Iulie','August','Septembrie','Octombrie','Noiembrie','Decembrie'];
+  const DAYS = ['Lu','Ma','Mi','Jo','Vi','Sâ','Du'];
+  const TIMES = ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00'];
+
+  function openBooking(){
+    selectedDate = null; selectedTime = null;
+    document.getElementById('confirmBtn').disabled = true;
+    renderCalendar();
+    renderTimes();
+    document.getElementById('bookingPanel').classList.add('visible');
+  }
+
+  function closeBooking(){
+    document.getElementById('bookingPanel').classList.remove('visible');
+  }
+
+  function renderCalendar(){
+    const y = currentDate.getFullYear();
+    const m = currentDate.getMonth();
+    document.getElementById('calMonth').textContent = MONTHS[m] + ' ' + y;
+    const grid = document.getElementById('calGrid');
+    grid.innerHTML = '';
+    DAYS.forEach(d => { const el = document.createElement('div'); el.className='cal-day-name'; el.textContent=d; grid.appendChild(el); });
+    const firstDay = new Date(y, m, 1).getDay();
+    const offset = firstDay === 0 ? 6 : firstDay - 1;
+    const daysInMonth = new Date(y, m+1, 0).getDate();
+    const today = new Date(); today.setHours(0,0,0,0);
+    for(let i=0; i<offset; i++){ const el=document.createElement('div'); el.className='cal-day empty'; grid.appendChild(el); }
+    for(let d=1; d<=daysInMonth; d++){
+      const el = document.createElement('div');
+      el.className = 'cal-day';
+      el.textContent = d;
+      const date = new Date(y, m, d);
+      const dayOfWeek = date.getDay();
+      if(date < today || dayOfWeek === 0) { el.classList.add('disabled'); }
+      else {
+        if(date.toDateString() === today.toDateString()) el.classList.add('today');
+        if(selectedDate && date.toDateString() === selectedDate.toDateString()) el.classList.add('selected');
+        el.addEventListener('click', () => { selectedDate = date; renderCalendar(); checkConfirm(); });
+      }
+      grid.appendChild(el);
+    }
+  }
+
+  function renderTimes(){
+    const grid = document.getElementById('timeGrid');
+    grid.innerHTML = '';
+    TIMES.forEach(t => {
+      const el = document.createElement('div');
+      el.className = 'time-slot';
+      el.textContent = t;
+      if(selectedTime === t) el.classList.add('selected');
+      el.addEventListener('click', () => { selectedTime = t; renderTimes(); checkConfirm(); });
+      grid.appendChild(el);
+    });
+  }
+
+  function checkConfirm(){
+    document.getElementById('confirmBtn').disabled = !(selectedDate && selectedTime);
+  }
+
+  function confirmBooking(){
+    if(!selectedDate || !selectedTime) return;
+    const dateStr = selectedDate.toLocaleDateString('ro-RO', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
+    const msg = `Am ales data: ${dateStr}, ora: ${selectedTime}`;
+    closeBooking();
+    inputEl.value = msg;
+    sendMessage();
+  }
+
+  document.getElementById('prevMonth').addEventListener('click', () => {
+    const today = new Date();
+    if(currentDate.getFullYear() === today.getFullYear() && currentDate.getMonth() === today.getMonth()) return;
+    currentDate.setMonth(currentDate.getMonth()-1); renderCalendar();
+  });
+  document.getElementById('nextMonth').addEventListener('click', () => {
+    currentDate.setMonth(currentDate.getMonth()+1); renderCalendar();
+  });
 
   window.addEventListener('load',()=>inputEl.focus());
 </script>
