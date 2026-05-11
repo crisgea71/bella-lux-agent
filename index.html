@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bella Lux Beauty Studio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --rose: #f4c6c6; --rose-deep: #e8a0a0; --rose-light: #fdf0f0;
+      --gold: #c9a96e; --cream: #fefaf6; --charcoal: #2c2830;
+      --muted: #8a7f8d; --border: #eedede;
+    }
+    html, body { height: 100%; background: var(--cream); font-family: 'DM Sans', sans-serif; color: var(--charcoal); overflow: hidden; }
+    body::before {
+      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background: radial-gradient(ellipse 60% 40% at 0% 0%, rgba(244,198,198,0.35) 0%, transparent 60%),
+                  radial-gradient(ellipse 50% 50% at 100% 100%, rgba(201,169,110,0.18) 0%, transparent 55%);
+    }
+    .app { position: relative; z-index: 1; height: 100vh; display: flex; flex-direction: column; max-width: 780px; margin: 0 auto; padding: 20px 16px 0; }
+    .header { display: flex; align-items: center; gap: 14px; padding: 18px 24px; background: rgba(255,255,255,0.82); backdrop-filter: blur(16px); border: 1px solid var(--border); border-radius: 18px; box-shadow: 0 4px 30px rgba(196,140,140,0.12); margin-bottom: 14px; flex-shrink: 0; }
+    .header-avatar { width: 48px; height: 48px; background: linear-gradient(135deg, var(--rose-deep), var(--gold)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+    .header-name { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 600; }
+    .header-sub { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; }
+    .header-status { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--gold); margin-left: auto; }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #7ec98a; animation: pulse 2.2s ease infinite; }
+    @keyframes pulse { 0%,100%{box-shadow:0 0 0 2px rgba(126,201,138,0.3)}50%{box-shadow:0 0 0 5px rgba(126,201,138,0.1)} }
+    .btn-reset { background: none; border: 1px solid var(--border); border-radius: 8px; width: 36px; height: 36px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 15px; transition: all 0.2s; }
+    .btn-reset:hover { background: var(--rose-light); color: var(--rose-deep); }
+    .chips-wrap { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; flex-shrink: 0; }
+    .chip { padding: 6px 14px; background: rgba(255,255,255,0.75); border: 1px solid var(--border); border-radius: 20px; font-size: 0.76rem; cursor: pointer; transition: all 0.18s; backdrop-filter: blur(8px); }
+    .chip:hover { background: var(--rose-light); border-color: var(--rose-deep); color: #b05a5a; transform: translateY(-1px); }
+    .messages { flex: 1; overflow-y: auto; padding: 4px 2px 16px; display: flex; flex-direction: column; gap: 10px; scrollbar-width: thin; scrollbar-color: var(--rose) transparent; }
+    .msg-row { display: flex; gap: 10px; align-items: flex-end; animation: fadeUp 0.28s ease both; }
+    .msg-row.user { flex-direction: row-reverse; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)} }
+    .msg-avatar { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+    .msg-row.bot .msg-avatar { background: linear-gradient(135deg, var(--rose-deep), var(--gold)); }
+    .msg-row.user .msg-avatar { background: linear-gradient(135deg, #c9c4ef, #9b8fe8); }
+    .bubble { max-width: 72%; padding: 12px 16px; border-radius: 18px; line-height: 1.55; font-size: 0.9rem; word-break: break-word; white-space: pre-wrap; }
+    .msg-row.bot .bubble { background: rgba(255,255,255,0.9); border: 1px solid var(--border); border-bottom-left-radius: 5px; box-shadow: 0 4px 30px rgba(196,140,140,0.12); }
+    .msg-row.user .bubble { background: linear-gradient(135deg, #e8b4b4, #d49090); color: white; border-bottom-right-radius: 5px; }
+    .msg-time { font-size: 0.65rem; color: var(--muted); margin-top: 3px; }
+    .msg-row.user .msg-time { text-align: right; }
+    .typing-row { display: none; }
+    .typing-row.visible { display: flex; }
+    .typing-bubble { background: rgba(255,255,255,0.9); border: 1px solid var(--border); border-radius: 18px; border-bottom-left-radius: 5px; padding: 14px 18px; display: flex; gap: 5px; align-items: center; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--rose-deep); animation: blink 1.3s ease infinite; }
+    .dot:nth-child(2){animation-delay:0.2s} .dot:nth-child(3){animation-delay:0.4s}
+    @keyframes blink { 0%,80%,100%{opacity:0.25;transform:scale(0.85)}40%{opacity:1;transform:scale(1)} }
+    .welcome { text-align: center; padding: 32px 20px 16px; animation: fadeUp 0.5s ease both; }
+    .welcome-icon { font-size: 3rem; margin-bottom: 10px; }
+    .welcome-title { font-family: 'Cormorant Garamond', serif; font-size: 1.7rem; font-weight: 600; margin-bottom: 6px; }
+    .welcome-text { font-size: 0.87rem; color: var(--muted); max-width: 380px; margin: 0 auto; line-height: 1.6; }
+    .input-wrap { padding: 12px 0 20px; flex-shrink: 0; }
+    .input-bar { display: flex; align-items: flex-end; gap: 10px; background: rgba(255,255,255,0.88); backdrop-filter: blur(16px); border: 1px solid var(--border); border-radius: 18px; padding: 10px 10px 10px 18px; box-shadow: 0 2px 20px rgba(196,140,140,0.18); transition: border-color 0.2s; }
+    .input-bar:focus-within { border-color: var(--rose-deep); }
+    #userInput { flex: 1; border: none; outline: none; background: transparent; font-family: 'DM Sans', sans-serif; font-size: 0.92rem; color: var(--charcoal); resize: none; min-height: 24px; max-height: 120px; line-height: 1.5; overflow-y: auto; }
+    #userInput::placeholder { color: #c0b0b5; }
+    #sendBtn { width: 42px; height: 42px; border-radius: 12px; border: none; background: linear-gradient(135deg, var(--rose-deep), #c97070); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s; }
+    #sendBtn:hover { transform: scale(1.07); }
+    #sendBtn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .footer-note { text-align: center; font-size: 0.68rem; color: var(--muted); padding-bottom: 6px; opacity: 0.7; }
+  </style>
+</head>
+<body>
+<div class="app">
+  <header class="header">
+    <div class="header-avatar">🌸</div>
+    <div>
+      <div class="header-name">Sophia – Bella Lux</div>
+      <div class="header-sub">Asistentă Cosmetică AI</div>
+    </div>
+    <div class="header-status"><div class="status-dot"></div>Online</div>
+    <button class="btn-reset" id="resetBtn" title="Conversație nouă">↺</button>
+  </header>
+  <div class="chips-wrap">
+    <button class="chip" onclick="sendChip('Ce servicii oferiți?')">💅 Servicii</button>
+    <button class="chip" onclick="sendChip('Care sunt prețurile?')">💰 Prețuri</button>
+    <button class="chip" onclick="sendChip('Care este programul vostru?')">🕐 Program</button>
+    <button class="chip" onclick="sendChip('Vreau să fac o programare')">📅 Programare</button>
+  </div>
+  <div class="messages" id="messages">
+    <div class="welcome" id="welcomeMsg">
+      <div class="welcome-icon">💆‍♀️</div>
+      <div class="welcome-title">Bine ai venit!</div>
+      <div class="welcome-text">Sunt Sophia, asistenta ta de la <strong>Bella Lux Beauty Studio</strong>. Te pot ajuta cu informații sau poți face o programare direct aici. ✨</div>
+    </div>
+    <div class="msg-row bot typing-row" id="typingIndicator">
+      <div class="msg-avatar">🌸</div>
+      <div class="typing-bubble"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+    </div>
+  </div>
+  <div class="input-wrap">
+    <div class="input-bar">
+      <textarea id="userInput" placeholder="Scrie un mesaj..." rows="1"></textarea>
+      <button id="sendBtn">➤</button>
+    </div>
+    <div class="footer-note">Bella Lux Beauty Studio · 0740 123 456</div>
+  </div>
+</div>
+<script>
+  const SESSION_ID = 'sess_' + Math.random().toString(36).slice(2,10);
+  let isSending = false;
+  const messagesEl = document.getElementById('messages');
+  const inputEl = document.getElementById('userInput');
+  const sendBtn = document.getElementById('sendBtn');
+  const typingRow = document.getElementById('typingIndicator');
+  const welcomeMsg = document.getElementById('welcomeMsg');
+
+  inputEl.addEventListener('input', () => { inputEl.style.height='auto'; inputEl.style.height=Math.min(inputEl.scrollHeight,120)+'px'; });
+  inputEl.addEventListener('keydown', e => { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();} });
+  sendBtn.addEventListener('click', sendMessage);
+  document.getElementById('resetBtn').addEventListener('click', resetConversation);
+
+  function sendChip(text){ inputEl.value=text; sendMessage(); }
+
+  function appendMessage(role, text){
+    if(welcomeMsg) welcomeMsg.style.display='none';
+    const now = new Date().toLocaleTimeString('ro-RO',{hour:'2-digit',minute:'2-digit'});
+    const isUser = role==='user';
+    const row = document.createElement('div');
+    row.className = `msg-row ${isUser?'user':'bot'}`;
+    const avatar = document.createElement('div');
+    avatar.className='msg-avatar'; avatar.textContent=isUser?'👤':'🌸';
+    const inner = document.createElement('div');
+    const bubble = document.createElement('div');
+    bubble.className='bubble'; bubble.textContent=text;
+    const timeEl = document.createElement('div');
+    timeEl.className='msg-time'; timeEl.textContent=now;
+    inner.appendChild(bubble); inner.appendChild(timeEl);
+    row.appendChild(avatar); row.appendChild(inner);
+    messagesEl.insertBefore(row, typingRow);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
+  async function sendMessage(){
+    const text = inputEl.value.trim();
+    if(!text||isSending) return;
+    isSending=true; sendBtn.disabled=true;
+    inputEl.value=''; inputEl.style.height='auto';
+    appendMessage('user', text);
+    typingRow.classList.add('visible');
+    messagesEl.scrollTop=messagesEl.scrollHeight;
+    try {
+      const res = await fetch('/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id:SESSION_ID,message:text})});
+      const data = await res.json();
+      typingRow.classList.remove('visible');
+      appendMessage('bot', data.reply||data.error||'Eroare neașteptată.');
+    } catch(err){
+      typingRow.classList.remove('visible');
+      appendMessage('bot','😔 Nu pot comunica cu serverul. Încearcă din nou.');
+    }
+    isSending=false; sendBtn.disabled=false; inputEl.focus();
+  }
+
+  async function resetConversation(){
+    try{ await fetch('/reset',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id:SESSION_ID})}); }catch(e){}
+    document.querySelectorAll('.msg-row:not(.typing-row)').forEach(b=>b.remove());
+    if(welcomeMsg) welcomeMsg.style.display='block';
+  }
+
+  window.addEventListener('load',()=>inputEl.focus());
+</script>
+</body>
+</html>
