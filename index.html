@@ -7,11 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --rose: #f4c6c6; --rose-deep: #e8a0a0; --rose-light: #fdf0f0;
-      --gold: #c9a96e; --cream: #fefaf6; --charcoal: #2c2830;
-      --muted: #8a7f8d; --border: #eedede;
-    }
+    :root { --rose: #f4c6c6; --rose-deep: #e8a0a0; --rose-light: #fdf0f0; --gold: #c9a96e; --cream: #fefaf6; --charcoal: #2c2830; --muted: #8a7f8d; --border: #eedede; }
     html, body { height: 100%; background: var(--cream); font-family: 'DM Sans', sans-serif; color: var(--charcoal); overflow: hidden; }
     body::before { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0; background: radial-gradient(ellipse 60% 40% at 0% 0%, rgba(244,198,198,0.35) 0%, transparent 60%), radial-gradient(ellipse 50% 50% at 100% 100%, rgba(201,169,110,0.18) 0%, transparent 55%); }
     .app { position: relative; z-index: 1; height: 100vh; display: flex; flex-direction: column; max-width: 780px; margin: 0 auto; padding: 20px 16px 0; }
@@ -60,12 +56,23 @@
     #sendBtn:hover { transform: scale(1.07); }
     #sendBtn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
     .footer-note { text-align: center; font-size: 0.68rem; color: var(--muted); padding-bottom: 6px; opacity: 0.7; }
+    .msg-counter { font-size: 0.68rem; color: var(--muted); text-align: center; padding: 2px 0 8px; opacity: 0.7; }
     .limit-banner { background: linear-gradient(135deg, #fdf0f0, #fff5e6); border: 1px solid var(--rose); border-radius: 14px; padding: 16px 20px; text-align: center; margin: 8px 0; animation: fadeUp 0.3s ease both; }
     .limit-banner h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: var(--charcoal); margin-bottom: 6px; }
     .limit-banner p { font-size: 0.82rem; color: var(--muted); margin-bottom: 12px; line-height: 1.5; }
-    .limit-banner a { display: inline-block; padding: 8px 20px; background: linear-gradient(135deg, var(--rose-deep), #c97070); color: white; border-radius: 10px; font-size: 0.82rem; text-decoration: none; transition: all 0.2s; }
-    .limit-banner a:hover { transform: translateY(-1px); }
-    .msg-counter { font-size: 0.68rem; color: var(--muted); text-align: center; padding: 2px 0 8px; opacity: 0.7; }
+    .limit-banner a { display: inline-block; padding: 8px 20px; background: linear-gradient(135deg, var(--rose-deep), #c97070); color: white; border-radius: 10px; font-size: 0.82rem; text-decoration: none; }
+    .review-panel { display: none; position: fixed; inset: 0; background: rgba(44,40,48,0.45); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; }
+    .review-panel.visible { display: flex; }
+    .review-card { background: var(--cream); border: 1px solid var(--border); border-radius: 24px; padding: 28px; width: 90%; max-width: 380px; box-shadow: 0 8px 40px rgba(196,140,140,0.25); animation: fadeUp 0.3s ease both; text-align: center; }
+    .review-icon { font-size: 2.5rem; margin-bottom: 12px; }
+    .review-title { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 600; margin-bottom: 8px; }
+    .review-text { font-size: 0.85rem; color: var(--muted); margin-bottom: 20px; line-height: 1.5; }
+    .review-stars { font-size: 1.8rem; margin-bottom: 20px; letter-spacing: 4px; }
+    .review-actions { display: flex; gap: 10px; }
+    .btn-review-yes { flex: 1; padding: 12px; border-radius: 12px; border: none; background: linear-gradient(135deg, var(--rose-deep), #c97070); color: white; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; }
+    .btn-review-yes:hover { transform: translateY(-1px); }
+    .btn-review-no { flex: 1; padding: 12px; border-radius: 12px; border: 1px solid var(--border); background: white; color: var(--muted); font-size: 0.9rem; cursor: pointer; }
+    .btn-review-no:hover { background: var(--rose-light); }
     .booking-panel { display: none; position: fixed; inset: 0; background: rgba(44,40,48,0.45); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; }
     .booking-panel.visible { display: flex; }
     .booking-card { background: var(--cream); border: 1px solid var(--border); border-radius: 24px; padding: 28px; width: 90%; max-width: 420px; box-shadow: 0 8px 40px rgba(196,140,140,0.25); animation: fadeUp 0.3s ease both; }
@@ -80,18 +87,17 @@
     .cal-day-name { text-align: center; font-size: 0.68rem; color: var(--muted); padding: 4px 0; }
     .cal-day { text-align: center; padding: 7px 4px; border-radius: 8px; font-size: 0.82rem; cursor: pointer; transition: all 0.15s; border: 1px solid transparent; }
     .cal-day:hover:not(.disabled):not(.empty) { background: var(--rose-light); border-color: var(--rose); }
-    .cal-day.selected { background: linear-gradient(135deg, var(--rose-deep), #c97070); color: white; border-color: transparent; }
+    .cal-day.selected { background: linear-gradient(135deg, var(--rose-deep), #c97070); color: white; }
     .cal-day.disabled { color: #d0c8cc; cursor: not-allowed; }
     .cal-day.empty { cursor: default; }
     .cal-day.today { font-weight: 600; color: var(--gold); }
     .time-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
     .time-slot { text-align: center; padding: 8px 4px; border-radius: 10px; font-size: 0.82rem; cursor: pointer; border: 1px solid var(--border); background: white; transition: all 0.15s; }
     .time-slot:hover { background: var(--rose-light); border-color: var(--rose-deep); }
-    .time-slot.selected { background: linear-gradient(135deg, var(--rose-deep), #c97070); color: white; border-color: transparent; }
+    .time-slot.selected { background: linear-gradient(135deg, var(--rose-deep), #c97070); color: white; }
     .booking-actions { display: flex; gap: 10px; margin-top: 4px; }
     .btn-confirm { flex: 1; padding: 12px; border-radius: 12px; border: none; background: linear-gradient(135deg, var(--rose-deep), #c97070); color: white; font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: all 0.2s; }
-    .btn-confirm:hover { transform: translateY(-1px); }
-    .btn-confirm:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .btn-confirm:disabled { opacity: 0.5; cursor: not-allowed; }
     .btn-cancel { padding: 12px 20px; border-radius: 12px; border: 1px solid var(--border); background: white; color: var(--muted); font-size: 0.9rem; cursor: pointer; }
     .btn-cancel:hover { background: var(--rose-light); }
     .map-panel { display: none; position: fixed; inset: 0; background: rgba(44,40,48,0.45); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; }
@@ -115,7 +121,7 @@
     <button class="btn-lang" id="langBtn" onclick="toggleLang()" title="Switch language">🇷🇴</button>
     <button class="btn-reset" id="resetBtn" title="Conversație nouă">↺</button>
   </header>
-  <div class="chips-wrap" id="chipsWrap">
+  <div class="chips-wrap">
     <button class="chip" id="chip0" onclick="sendChip(T.services)">💅 <span id="c0">Servicii</span></button>
     <button class="chip" id="chip1" onclick="sendChip(T.prices)">💰 <span id="c1">Prețuri</span></button>
     <button class="chip" id="chip2" onclick="sendChip(T.schedule)">🕐 <span id="c2">Program</span></button>
@@ -143,6 +149,19 @@
       <button id="sendBtn">➤</button>
     </div>
     <div class="footer-note" id="footerNote">Bella Lux Beauty Studio · 0744261906</div>
+  </div>
+</div>
+
+<div class="review-panel" id="reviewPanel">
+  <div class="review-card">
+    <div class="review-icon">⭐</div>
+    <div class="review-title" id="reviewTitle">Îți place Sophia?</div>
+    <div class="review-stars">⭐⭐⭐⭐⭐</div>
+    <div class="review-text" id="reviewText">Lasă un review și ajută alte cliente să ne găsească!</div>
+    <div class="review-actions">
+      <button class="btn-review-yes" onclick="goToReview()">Da, las review! 🌸</button>
+      <button class="btn-review-no" onclick="closeReview()">Nu acum</button>
+    </div>
   </div>
 </div>
 
@@ -197,8 +216,7 @@
       headerSub: 'Asistentă Cosmetică AI', status: 'Online',
       services: 'Ce servicii oferiți?', prices: 'Care sunt prețurile?',
       schedule: 'Care este programul vostru?', products: 'Ce produse folosiți?',
-      promos: 'Aveți pachete promoționale?', location: 'Cum ajung la voi?',
-      duration: 'Cât durează o ședință de manichiură?',
+      promos: 'Aveți pachete promoționale?', duration: 'Cât durează o ședință de manichiură?',
       c0:'Servicii', c1:'Prețuri', c2:'Program', c3:'Programare',
       c4:'Produse', c5:'Promoții', c6:'Locație', c7:'Durată',
       placeholder: 'Scrie un mesaj...',
@@ -209,8 +227,8 @@
       switchMsg: 'Te rog să îmi vorbești în română de acum.',
       counter: (n) => `${n} mesaje gratuite rămase`,
       limitTitle: '🌸 Ți-a plăcut Sophia?',
-      limitText: 'Creez agenți AI personalizați pentru saloane de înfrumusețare. Contactează-mă pentru un agent cu brandul tău!',
-      limitBtn: 'Contactează-mă',
+      limitText: 'Creez agenți AI personalizați pentru saloane. Contactează-mă pentru un agent cu brandul tău!',
+      limitBtn: 'Contactează-mă pe WhatsApp',
       months: ['Ianuarie','Februarie','Martie','Aprilie','Mai','Iunie','Iulie','August','Septembrie','Octombrie','Noiembrie','Decembrie'],
       days: ['Lu','Ma','Mi','Jo','Vi','Sâ','Du'],
       dateFormat: (d) => d.toLocaleDateString('ro-RO', {weekday:'long', day:'numeric', month:'long', year:'numeric'}),
@@ -220,8 +238,7 @@
       headerSub: 'AI Beauty Assistant', status: 'Online',
       services: 'What services do you offer?', prices: 'What are your prices?',
       schedule: 'What are your opening hours?', products: 'What products do you use?',
-      promos: 'Do you have any promotions?', location: 'How do I get to you?',
-      duration: 'How long does a manicure take?',
+      promos: 'Do you have any promotions?', duration: 'How long does a manicure take?',
       c0:'Services', c1:'Prices', c2:'Schedule', c3:'Booking',
       c4:'Products', c5:'Promotions', c6:'Location', c7:'Duration',
       placeholder: 'Type a message...',
@@ -232,8 +249,8 @@
       switchMsg: 'Please speak to me in English from now on.',
       counter: (n) => `${n} free messages remaining`,
       limitTitle: '🌸 Did you like Sophia?',
-      limitText: 'I create custom AI agents for beauty salons. Contact me for an agent with your own branding!',
-      limitBtn: 'Contact me',
+      limitText: 'I create custom AI agents for beauty salons. Contact me for your own branded agent!',
+      limitBtn: 'Contact me on WhatsApp',
       months: ['January','February','March','April','May','June','July','August','September','October','November','December'],
       days: ['Mo','Tu','We','Th','Fr','Sa','Su'],
       dateFormat: (d) => d.toLocaleDateString('en-GB', {weekday:'long', day:'numeric', month:'long', year:'numeric'}),
@@ -245,29 +262,25 @@
 
   function updateCounter() {
     const remaining = MAX_FREE_MESSAGES - messageCount;
-    if(remaining > 0) {
-      msgCounter.textContent = T.counter(remaining);
-      msgCounter.style.display = 'block';
-    } else {
-      msgCounter.style.display = 'none';
-    }
+    if(remaining > 0) { msgCounter.textContent = T.counter(remaining); msgCounter.style.display = 'block'; }
+    else { msgCounter.style.display = 'none'; }
   }
 
   function showLimitBanner() {
     const banner = document.createElement('div');
     banner.className = 'limit-banner';
-    banner.innerHTML = `
-      <h3>${T.limitTitle}</h3>
-      <p>${T.limitText}</p>
-      <a href="https://wa.me/40744261906" target="_blank">${T.limitBtn} 💬</a>
-    `;
+    banner.innerHTML = `<h3>${T.limitTitle}</h3><p>${T.limitText}</p><a href="https://wa.me/40744261906" target="_blank">${T.limitBtn} 💬</a>`;
     messagesEl.insertBefore(banner, typingRow);
     messagesEl.scrollTop = messagesEl.scrollHeight;
     inputEl.disabled = true;
     sendBtn.disabled = true;
   }
 
-  function toggleLang(){
+  function openReview() { document.getElementById('reviewPanel').classList.add('visible'); }
+  function closeReview() { document.getElementById('reviewPanel').classList.remove('visible'); }
+  function goToReview() { closeReview(); window.open('https://g.page/r/bella-lux-review', '_blank'); }
+
+  function toggleLang() {
     currentLang = currentLang === 'ro' ? 'en' : 'ro';
     T = TRANSLATIONS[currentLang];
     document.getElementById('langBtn').textContent = currentLang === 'ro' ? '🇷🇴' : '🇬🇧';
@@ -293,9 +306,9 @@
   sendBtn.addEventListener('click', sendMessage);
   document.getElementById('resetBtn').addEventListener('click', resetConversation);
 
-  function sendChip(text){ inputEl.value=text; sendMessage(); }
+  function sendChip(text) { inputEl.value=text; sendMessage(); }
 
-  function appendMessage(role, text){
+  function appendMessage(role, text) {
     if(welcomeMsg) welcomeMsg.style.display='none';
     const now = new Date().toLocaleTimeString('ro-RO',{hour:'2-digit',minute:'2-digit'});
     const isUser = role==='user';
@@ -314,34 +327,35 @@
     messagesEl.scrollTop = messagesEl.scrollHeight;
   }
 
-  async function sendMessage(){
+  async function sendMessage() {
     const text = inputEl.value.trim();
     if(!text||isSending) return;
-    if(messageCount >= MAX_FREE_MESSAGES){ showLimitBanner(); return; }
+    if(messageCount >= MAX_FREE_MESSAGES) { showLimitBanner(); return; }
     isSending=true; sendBtn.disabled=true;
     inputEl.value=''; inputEl.style.height='auto';
     appendMessage('user', text);
     messageCount++;
     updateCounter();
-    if(messageCount >= MAX_FREE_MESSAGES){ inputEl.disabled=true; }
     typingRow.classList.add('visible');
     messagesEl.scrollTop=messagesEl.scrollHeight;
     try {
       const res = await fetch('/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id:SESSION_ID,message:text})});
       const data = await res.json();
       typingRow.classList.remove('visible');
-      appendMessage('bot', data.reply||data.error||'Eroare neașteptată.');
-      if(messageCount >= MAX_FREE_MESSAGES){ setTimeout(showLimitBanner, 1000); }
-    } catch(err){
+      const reply = data.reply||data.error||'Eroare neașteptată.';
+      appendMessage('bot', reply);
+      if(reply.toLowerCase().includes('review')) { setTimeout(openReview, 1500); }
+      if(messageCount >= MAX_FREE_MESSAGES) { setTimeout(showLimitBanner, 1000); }
+    } catch(err) {
       typingRow.classList.remove('visible');
-      appendMessage('bot','😔 Nu pot comunica cu serverul.');
+      appendMessage('bot','😔 Nu pot comunica cu serverul. Încearcă din nou.');
     }
     isSending=false;
-    if(messageCount < MAX_FREE_MESSAGES){ sendBtn.disabled=false; inputEl.disabled=false; }
+    if(messageCount < MAX_FREE_MESSAGES) { sendBtn.disabled=false; inputEl.disabled=false; }
     inputEl.focus();
   }
 
-  async function resetConversation(){
+  async function resetConversation() {
     try{ await fetch('/reset',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id:SESSION_ID})}); }catch(e){}
     document.querySelectorAll('.msg-row:not(.typing-row), .limit-banner').forEach(b=>b.remove());
     if(welcomeMsg) welcomeMsg.style.display='block';
@@ -349,23 +363,23 @@
     updateCounter();
   }
 
-  function openMap(){ document.getElementById('mapPanel').classList.add('visible'); }
-  function closeMap(){ document.getElementById('mapPanel').classList.remove('visible'); }
+  function openMap() { document.getElementById('mapPanel').classList.add('visible'); }
+  function closeMap() { document.getElementById('mapPanel').classList.remove('visible'); }
 
   let currentDate = new Date();
   let selectedDate = null;
   let selectedTime = null;
   const TIMES = ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00'];
 
-  function openBooking(){
+  function openBooking() {
     selectedDate=null; selectedTime=null;
     document.getElementById('confirmBtn').disabled=true;
     renderCalendar(); renderTimes();
     document.getElementById('bookingPanel').classList.add('visible');
   }
-  function closeBooking(){ document.getElementById('bookingPanel').classList.remove('visible'); }
+  function closeBooking() { document.getElementById('bookingPanel').classList.remove('visible'); }
 
-  function renderCalendar(){
+  function renderCalendar() {
     const y=currentDate.getFullYear(), m=currentDate.getMonth();
     document.getElementById('calMonth').textContent = T.months[m]+' '+y;
     const grid=document.getElementById('calGrid'); grid.innerHTML='';
@@ -377,8 +391,8 @@
     for(let i=0;i<offset;i++){ const el=document.createElement('div'); el.className='cal-day empty'; grid.appendChild(el); }
     for(let d=1;d<=daysInMonth;d++){
       const el=document.createElement('div'); el.className='cal-day'; el.textContent=d;
-      const date=new Date(y,m,d); const dow=date.getDay();
-      if(date<today||dow===0){ el.classList.add('disabled'); }
+      const date=new Date(y,m,d);
+      if(date<today||date.getDay()===0){ el.classList.add('disabled'); }
       else {
         if(date.toDateString()===today.toDateString()) el.classList.add('today');
         if(selectedDate&&date.toDateString()===selectedDate.toDateString()) el.classList.add('selected');
@@ -388,7 +402,7 @@
     }
   }
 
-  function renderTimes(){
+  function renderTimes() {
     const grid=document.getElementById('timeGrid'); grid.innerHTML='';
     TIMES.forEach(t=>{
       const el=document.createElement('div'); el.className='time-slot'; el.textContent=t;
@@ -398,9 +412,9 @@
     });
   }
 
-  function checkConfirm(){ document.getElementById('confirmBtn').disabled=!(selectedDate&&selectedTime); }
+  function checkConfirm() { document.getElementById('confirmBtn').disabled=!(selectedDate&&selectedTime); }
 
-  function confirmBooking(){
+  function confirmBooking() {
     if(!selectedDate||!selectedTime) return;
     const dateStr = T.dateFormat(selectedDate);
     const msg = T.dateMsg(dateStr, selectedTime);
