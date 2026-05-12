@@ -155,9 +155,9 @@
 <div class="review-panel" id="reviewPanel">
   <div class="review-card">
     <div class="review-icon">⭐</div>
-    <div class="review-title" id="reviewTitle">Îți place Sophia?</div>
+    <div class="review-title">Îți place Sophia?</div>
     <div class="review-stars">⭐⭐⭐⭐⭐</div>
-    <div class="review-text" id="reviewText">Lasă un review și ajută alte cliente să ne găsească!</div>
+    <div class="review-text">Lasă un review și ajută alte cliente să ne găsească!</div>
     <div class="review-actions">
       <button class="btn-review-yes" onclick="goToReview()">Da, las review! 🌸</button>
       <button class="btn-review-no" onclick="closeReview()">Nu acum</button>
@@ -203,6 +203,8 @@
   let currentLang = 'ro';
   let messageCount = 0;
   const MAX_FREE_MESSAGES = 5;
+  const UNLOCK_PASSWORD = 'zum-zum';
+  let isUnlocked = false;
 
   const messagesEl = document.getElementById('messages');
   const inputEl = document.getElementById('userInput');
@@ -227,7 +229,7 @@
       switchMsg: 'Te rog să îmi vorbești în română de acum.',
       counter: (n) => `${n} mesaje gratuite rămase`,
       limitTitle: '🌸 Ți-a plăcut Sophia?',
-      limitText: 'Creez agenți AI personalizați pentru saloane. Contactează-mă pentru un agent cu brandul tău!',
+      limitText: 'Creez agenți AI personalizați pentru saloane. Contactează-mă pentru un agent cu brandul tău! Sau introdu parola pentru acces nelimitat.',
       limitBtn: 'Contactează-mă pe WhatsApp',
       months: ['Ianuarie','Februarie','Martie','Aprilie','Mai','Iunie','Iulie','August','Septembrie','Octombrie','Noiembrie','Decembrie'],
       days: ['Lu','Ma','Mi','Jo','Vi','Sâ','Du'],
@@ -249,7 +251,7 @@
       switchMsg: 'Please speak to me in English from now on.',
       counter: (n) => `${n} free messages remaining`,
       limitTitle: '🌸 Did you like Sophia?',
-      limitText: 'I create custom AI agents for beauty salons. Contact me for your own branded agent!',
+      limitText: 'I create custom AI agents for beauty salons. Contact me for your own branded agent! Or enter the password for unlimited access.',
       limitBtn: 'Contact me on WhatsApp',
       months: ['January','February','March','April','May','June','July','August','September','October','November','December'],
       days: ['Mo','Tu','We','Th','Fr','Sa','Su'],
@@ -262,18 +264,20 @@
 
   function updateCounter() {
     const remaining = MAX_FREE_MESSAGES - messageCount;
-    if(remaining > 0) { msgCounter.textContent = T.counter(remaining); msgCounter.style.display = 'block'; }
+    if(remaining > 0 && !isUnlocked) { msgCounter.textContent = T.counter(remaining); msgCounter.style.display = 'block'; }
     else { msgCounter.style.display = 'none'; }
   }
 
   function showLimitBanner() {
+    if(document.querySelector('.limit-banner')) return;
     const banner = document.createElement('div');
     banner.className = 'limit-banner';
     banner.innerHTML = `<h3>${T.limitTitle}</h3><p>${T.limitText}</p><a href="https://wa.me/40744261906" target="_blank">${T.limitBtn} 💬</a>`;
     messagesEl.insertBefore(banner, typingRow);
     messagesEl.scrollTop = messagesEl.scrollHeight;
-    inputEl.disabled = true;
-    sendBtn.disabled = true;
+    inputEl.placeholder = '🔑 Introdu parola pentru acces nelimitat...';
+    inputEl.disabled = false;
+    sendBtn.disabled = false;
   }
 
   function openReview() { document.getElementById('reviewPanel').classList.add('visible'); }
@@ -329,8 +333,25 @@
 
   async function sendMessage() {
     const text = inputEl.value.trim();
-    if(!text||isSending) return;
-    if(messageCount >= MAX_FREE_MESSAGES) { showLimitBanner(); return; }
+    if(!text || isSending) return;
+
+    // Verifică parola
+    if(messageCount >= MAX_FREE_MESSAGES && !isUnlocked) {
+      if(text.toLowerCase() === UNLOCK_PASSWORD) {
+        isUnlocked = true;
+        document.querySelectorAll('.limit-banner').forEach(b=>b.remove());
+        inputEl.value = '';
+        inputEl.placeholder = T.placeholder;
+        sendBtn.disabled = false;
+        inputEl.disabled = false;
+        msgCounter.style.display = 'none';
+        appendMessage('bot', '🔓 Acces nelimitat activat! Bine ai venit! 🌸');
+        return;
+      }
+      showLimitBanner();
+      return;
+    }
+
     isSending=true; sendBtn.disabled=true;
     inputEl.value=''; inputEl.style.height='auto';
     appendMessage('user', text);
@@ -338,6 +359,7 @@
     updateCounter();
     typingRow.classList.add('visible');
     messagesEl.scrollTop=messagesEl.scrollHeight;
+
     try {
       const res = await fetch('/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id:SESSION_ID,message:text})});
       const data = await res.json();
@@ -345,13 +367,13 @@
       const reply = data.reply||data.error||'Eroare neașteptată.';
       appendMessage('bot', reply);
       if(reply.toLowerCase().includes('review')) { setTimeout(openReview, 1500); }
-      if(messageCount >= MAX_FREE_MESSAGES) { setTimeout(showLimitBanner, 1000); }
+      if(messageCount >= MAX_FREE_MESSAGES && !isUnlocked) { setTimeout(showLimitBanner, 500); }
     } catch(err) {
       typingRow.classList.remove('visible');
       appendMessage('bot','😔 Nu pot comunica cu serverul. Încearcă din nou.');
     }
     isSending=false;
-    if(messageCount < MAX_FREE_MESSAGES) { sendBtn.disabled=false; inputEl.disabled=false; }
+    if(isUnlocked || messageCount < MAX_FREE_MESSAGES) { sendBtn.disabled=false; }
     inputEl.focus();
   }
 
@@ -359,7 +381,9 @@
     try{ await fetch('/reset',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id:SESSION_ID})}); }catch(e){}
     document.querySelectorAll('.msg-row:not(.typing-row), .limit-banner').forEach(b=>b.remove());
     if(welcomeMsg) welcomeMsg.style.display='block';
-    messageCount=0; inputEl.disabled=false; sendBtn.disabled=false;
+    messageCount=0; isUnlocked=false;
+    inputEl.disabled=false; sendBtn.disabled=false;
+    inputEl.placeholder = T.placeholder;
     updateCounter();
   }
 
