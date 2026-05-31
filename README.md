@@ -1,67 +1,115 @@
-# 🌸 Bella Lux Beauty Studio – AI Agent
+# Bella Lux AI Agent – Beauty Salon Booking Assistant
 
-## The Problem
-Beauty salons lose **2-3 hours every day** answering the same questions on phone, WhatsApp, and Instagram:
-- "What services do you offer?"
-- "How much does a manicure cost?"
-- "Can I book for Saturday?"
-
-Sophia handles all of this automatically — 24/7, in Romanian and English.
-
----
+An AI-powered assistant that helps beauty salons answer client questions, explain services, collect bookings, and request reviews — in Romanian and English.
 
 🔗 **Live Demo:** https://bella-lux-agent-1.onrender.com
 
-> ⚡ First load may take ~30 seconds (free server wakes up on demand)
+> ⚡ First load may take around 30 seconds because the demo is hosted on Render free tier and may wake up on demand.
 
 ---
 
-## ✨ What Sophia Does
+## Why This Exists
 
-- 💬 Answers questions about services & prices instantly
-- 📅 Takes bookings with an interactive calendar
-- 🌍 Switches between Romanian and English
-- 📍 Shows salon location on a map
-- ⭐ Asks for a Google review after booking
-- 🔒 5 free messages to test before buying
+Beauty salons often lose time every day answering the same repetitive questions across phone, WhatsApp, Instagram, and direct messages:
 
-## ⏱ Time Saved
+- “What services do you offer?”
+- “How much does a manicure cost?”
+- “Can I book for Saturday?”
+- “Where is the salon located?”
+- “Do you speak Romanian or English?”
+
+**Sophia**, the salon’s AI assistant, handles these conversations automatically — 24/7.
+
+The goal of this project is to show how a small local business can use an AI assistant to save time, respond faster, and create a smoother booking experience for clients.
+
+---
+
+## What Sophia Can Do
+
+- Answer questions about salon services and prices
+- Help clients choose the right service
+- Take booking requests with an interactive calendar
+- Switch between Romanian and English
+- Show the salon location on a map
+- Ask clients for a Google review after booking
+- Provide a simple message-limit system for demo/testing purposes
+
+---
+
+## Who This Is For
+
+This demo is designed for:
+
+- beauty salons
+- nail studios
+- lash and brow studios
+- hair salons
+- skincare studios
+- small local service businesses
+- appointment-based businesses that receive repetitive client questions
+
+---
+
+## Business Value
+
+Sophia helps a salon reduce repetitive manual communication and respond to clients faster.
 
 | Task | Before | After |
 |------|--------|-------|
-| Answering repetitive questions | 90 min/day | 0 — Sophia handles it |
-| Taking bookings manually | 45 min/day | 0 — automated |
-| After-hours responses | Missed | 24/7 covered |
-| Asking for reviews | 20 min/day | Automatic |
+| Answering repetitive questions | 60–90 min/day | Handled by AI |
+| Booking requests | Manual replies | Assisted flow |
+| After-hours messages | Often missed | 24/7 response |
+| Review requests | Manual follow-up | Automatic prompt |
+| Language support | Depends on staff | Romanian + English |
 
-**~2 hours saved per day → ~60 hours per month**
+A small salon could save several hours per week by automating common client conversations.
 
 ---
 
-## 🛠 Tech Stack
+## Main Features
 
-- **Backend:** Python + Flask
-- **AI:** Groq API (Llama 3.3 70B)
-- **Frontend:** HTML / CSS / JavaScript
-- **Hosting:** Render.com (free tier)
+### AI Client Assistant
 
-## 🔐 Setup
+Sophia responds naturally to client questions about services, prices, appointments, and salon information.
 
-Create a `.env` file:
-```env
-GROQ_API_KEY=your_key_from_console.groq.com
-```
+### Booking Support
 
-Run locally:
+Clients can request appointments through a simple booking flow using an interactive calendar.
+
+### Romanian & English Support
+
+The assistant can communicate in both Romanian and English, making it useful for local and international clients.
+
+### Review Request Flow
+
+After a booking interaction, the assistant can ask the client to leave a Google review.
+
+### Demo Message Limit
+
+The app includes a basic message-limit system, useful for testing a “free trial” or demo experience.
+
+---
+
+## Tech Stack
+
+- **Backend:** Python, Flask
+- **AI Model:** Groq API / Llama 3.3 70B
+- **Frontend:** HTML, CSS, JavaScript
+- **Hosting:** Render
+- **Environment Variables:** Python dotenv
+
+---
+
+## Project Structure
+
 ```bash
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-python3 app.py
-```
-
----
-
-*Want a custom AI agent for your salon? Contact me on [WhatsApp](https://wa.me/40744261906) 🌸*
-
+bella-lux-agent/
+├── app.py
+├── requirements.txt
+├── templates/
+│   └── index.html
+├── static/
+│   ├── style.css
+│   └── script.js
+└── README.md
 *Built with Claude AI + Groq API*
